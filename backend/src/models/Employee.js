@@ -39,8 +39,8 @@ class Employee {
         throw new Error("Método abstracto");
     }
 
-    calculateBenefits() {
-        return 0;
+    getSalary() {
+        return this.calculateSalary();
     }
 }
 
