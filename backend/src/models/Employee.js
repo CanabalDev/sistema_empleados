@@ -42,6 +42,18 @@ class Employee {
     getSalary() {
         return this.calculateSalary();
     }
+
+    calculateBenefits() {
+        return 0;
+    }
+
+    calculateAdditionalDeductions() {
+        return 0;
+    }
+
+    getSavedAmount() {
+        return 0;
+    }
 }
 
 export default Employee;

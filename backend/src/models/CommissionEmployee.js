@@ -44,6 +44,10 @@ class CommissionEmployee extends Employee {
     calculateBonus() {
         return this.sales > 20000000 ? this.sales * 0.03 : 0;
     }
+
+    calculateBenefits() {
+        return 1000000;
+    }
 }
 
 export default CommissionEmployee;

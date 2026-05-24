@@ -18,6 +18,10 @@ class SalariedEmployee extends Employee {
 
         return this.monthlySalary + bonus;
     }
+
+    calculateBenefits() {
+        return 1000000;
+    }
 }
 
 export default SalariedEmployee;
