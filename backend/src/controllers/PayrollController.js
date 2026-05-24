@@ -4,8 +4,6 @@ import PayrollService from "../services/PayrollService.js";
 
 class PayrollController {
     static calculate(req, res) {
-        console.log(req.body);
-
         try {
             const employee = EmployeeFactory.create(req.body);
 
