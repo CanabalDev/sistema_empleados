@@ -1,168 +1,88 @@
 import { useState } from "react";
+import Card from "../UIComponents/Card";
+import Input from "../UIComponents/Input";
+import Select from "../UIComponents/Select";
+import HourlyFields from "../Fields/HourlyFields";
+import CommissionFields from "../Fields/CommissionFields";
+import SalariedFields from "../Fields/SalariedFields";
+import TemporaryFields from "../Fields/TemporaryFields";
 
 export default function EmployeeForm({ onSubmit }) {
     const [employee, setEmployee] = useState({
         type: "SALARIED",
+        yearsInCompany: 0,
     });
 
     function update(field, value) {
         setEmployee((prev) => ({
             ...prev,
+
             [field]: value,
         }));
     }
 
-    function submit(e) {
-        e.preventDefault();
-
-        onSubmit(employee);
-    }
+    const employeeOptions = [
+        { value: "SALARIED", label: "Asalariado" },
+        { value: "HOURLY", label: "Por horas" },
+        { value: "COMMISSION", label: "Comisión" },
+        { value: "TEMPORARY", label: "Temporal" },
+    ];
 
     return (
-        <form onSubmit={submit}>
-            <h2>Empleado</h2>
+        <Card>
+            <form
+                onSubmit={(e) => {
+                    e.preventDefault();
 
-            <select
-                value={employee.type}
-                onChange={(e) => update("type", e.target.value)}
+                    onSubmit(employee);
+                }}
             >
-                <option value="SALARIED">Asalariado</option>
+                <h2>Calcular Nómina</h2>
 
-                <option value="HOURLY">Por Horas</option>
+                <Select
+                    label="Tipo"
+                    value={employee.type}
+                    options={employeeOptions}
+                    onChange={(e) => update("type", e.target.value)}
+                />
 
-                <option value="COMMISSION">Comisión</option>
-
-                <option value="TEMPORARY">Temporal</option>
-            </select>
-
-            <br />
-
-            <input
-                placeholder="ID"
-                onChange={(e) => update("id", Number(e.target.value))}
-            />
-
-            <br />
-
-            <input
-                placeholder="Nombre"
-                onChange={(e) => update("name", e.target.value)}
-            />
-
-            <br />
-
-            <input
-                type="number"
-                placeholder="Años empresa"
-                onChange={(e) =>
-                    update("yearsInCompany", Number(e.target.value))
-                }
-            />
-
-            <br />
-
-            {employee.type === "SALARIED" && (
-                <input
+                <Input
+                    label="ID Empleado"
+                    onChange={(e) => update("id", e.target.value)}
                     type="number"
-                    placeholder="Salario mensual"
+                />
+
+                <Input
+                    label="Nombre"
+                    onChange={(e) => update("name", e.target.value)}
+                />
+
+                <Input
+                    label="Años en la empresa"
+                    type="number"
                     onChange={(e) =>
-                        update("monthlySalary", Number(e.target.value))
+                        update("yearsInCompany", Number(e.target.value))
                     }
                 />
-            )}
 
-            {employee.type === "HOURLY" && (
-                <>
-                    <input
-                        type="number"
-                        placeholder="Horas"
-                        onChange={(e) =>
-                            update("hoursWorked", Number(e.target.value))
-                        }
-                    />
+                {employee.type === "HOURLY" && (
+                    <HourlyFields employee={employee} update={update} />
+                )}
 
-                    <br />
+                {employee.type === "COMMISSION" && (
+                    <CommissionFields update={update} />
+                )}
 
-                    <input
-                        type="number"
-                        placeholder="Tarifa"
-                        onChange={(e) =>
-                            update("hourlyRate", Number(e.target.value))
-                        }
-                    />
+                {employee.type === "SALARIED" && (
+                    <SalariedFields update={update} />
+                )}
 
-                    <br />
+                {employee.type === "TEMPORARY" && (
+                    <TemporaryFields update={update} />
+                )}
 
-                    <label>
-                        <input
-                            type="checkbox"
-                            onChange={(e) =>
-                                update("acceptSavingsFund", e.target.checked)
-                            }
-                        />
-                        Fondo ahorro
-                    </label>
-                </>
-            )}
-
-            {employee.type === "COMMISSION" && (
-                <>
-                    <input
-                        type="number"
-                        placeholder="Salario base"
-                        onChange={(e) =>
-                            update("baseSalary", Number(e.target.value))
-                        }
-                    />
-
-                    <br />
-
-                    <input
-                        type="number"
-                        placeholder="Ventas"
-                        onChange={(e) =>
-                            update("sales", Number(e.target.value))
-                        }
-                    />
-
-                    <br />
-
-                    <input
-                        type="number"
-                        step="0.01"
-                        placeholder="Comisión (0.10)"
-                        onChange={(e) =>
-                            update("commissionRate", Number(e.target.value))
-                        }
-                    />
-                </>
-            )}
-
-            {employee.type === "TEMPORARY" && (
-                <>
-                    <input
-                        type="number"
-                        placeholder="Salario mensual"
-                        onChange={(e) =>
-                            update("monthlySalary", Number(e.target.value))
-                        }
-                    />
-
-                    <br />
-
-                    <input
-                        type="date"
-                        onChange={(e) =>
-                            update("contractEndDate", e.target.value)
-                        }
-                    />
-                </>
-            )}
-
-            <br />
-            <br />
-
-            <button>Calcular Nómina</button>
-        </form>
+                <button>Calcular</button>
+            </form>
+        </Card>
     );
 }
